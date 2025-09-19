@@ -1,18 +1,23 @@
 import * as THREE from 'three';
 
+// Import shaders
+import vertexShader from './shaders/vertex.glsl?raw';
+import fragmentShader from './shaders/fragment.glsl?raw';
+
 export function createScene() {
   const scene = new THREE.Scene();
 
-  // Example mesh: cube with standard material
-  const geometry = new THREE.BoxGeometry();
-  const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
+  const geometry = new THREE.PlaneGeometry(2, 2); // fullscreen plane
+  const material = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    uniforms: {
+      time: { value: 0.0 }
+    }
+  });
 
-  // Light
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(2, 2, 5);
-  scene.add(light);
+  const plane = new THREE.Mesh(geometry, material);
+  scene.add(plane);
 
-  return { scene, cube };
+  return { scene, material };
 }
